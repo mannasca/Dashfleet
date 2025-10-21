@@ -1,38 +1,209 @@
-.App {
-  text-align: center;
+/* App.css - plain CSS equivalent to the Tailwind look */
+
+/* Global */
+:root{
+  --bg: #f3f4f6; /* gray-100 */
+  --card: #ffffff;
+  --muted: #6b7280; /* gray-500 */
+  --primary: #2563eb; /* blue-600 */
+  --danger: #dc2626; /* red-600 */
+  --shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  --soft-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  --radius: 12px;
+  --font-family: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* { box-sizing: border-box; }
+html,body,#root { height:100%; }
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+/* Layout */
+.app-root {
   min-height: 100vh;
+  padding: 32px;
+}
+
+/* Header */
+.top-header {
+  margin-bottom: 20px;
+}
+.top-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* Stats grid (4 columns on wide screens) */
+.stats-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(1, 1fr);
+  margin-bottom: 28px;
+}
+@media (min-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  padding: 14px;
+  border-radius: var(--radius);
+  box-shadow: var(--soft-shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.stat-card .stat-icon {
+  min-width: 48px;
+  min-height: 48px;
+  display: grid;
+  place-items: center;
+  background: #f3f4f6;
+  border-radius: 50%;
+  color: #2563eb;
+}
+.stat-card .stat-text { flex: 1; }
+.stat-title { color: var(--muted); font-size: 13px; margin-bottom:6px; }
+.stat-value { font-size: 22px; font-weight:700; color: #111827; }
+
+/* Dangerous (predicted failures) */
+.stat-card.danger .stat-icon { color: var(--danger); }
+
+/* Charts row */
+.charts-row {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+  margin-bottom: 28px;
+}
+@media (min-width: 992px) {
+  .charts-row { grid-template-columns: 1fr 1fr; }
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.chart-card h2 {
+  margin: 0 0 12px 0;
+  font-size: 18px;
+  color: #111827;
+}
+
+/* Chart wrapper ensures fixed height */
+.chart-wrapper {
+  width: 100%;
+  height: 240px;
+}
+
+/* Vehicles section */
+.vehicles-section {
+  margin-top: 8px;
+  margin-bottom: 32px;
+}
+.vehicles-section h2 {
+  font-size: 20px;
+  margin: 0 0 12px 0;
+  color: #111827;
+}
+
+.vehicles-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+  .vehicles-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Vehicle card */
+.vehicle-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--card);
+  box-shadow: var(--soft-shadow);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 12px;
+}
+.vehicle-header {
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.vehicle-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.vehicle-meta { font-size: 13px; color: var(--muted); }
+.meta-date { color: #374151; font-weight:600; margin-left:6px; }
+
+/* Progress */
+.progress-track {
+  width: 100%;
+  height: 14px;
+  background: #f3f4f6;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(37,99,235,1) 0%, rgba(59,130,246,1) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  padding-right:8px;
+  color:white;
+  font-weight:600;
+  font-size:12px;
+  border-radius: 999px;
+  transition: width .6s ease;
+}
+.progress-label { font-size: 12px; }
+
+/* Vehicle footer */
+.vehicle-footer {
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  color: #374151;
+  font-size: 14px;
+}
+.issues { color: var(--danger); font-weight:600; }
+
+/* Bottom controls */
+.bottom-controls {
+  display:flex;
+  justify-content:flex-end;
+  margin-top: 10px;
+}
+.primary-btn {
+  background: var(--primary);
   color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.18);
 }
+.primary-btn:hover { transform: translateY(-2px); transition: transform .18s ease; }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Make Recharts tooltip text readable */
+.recharts-default-tooltip {
+  font-family: var(--font-family);
+  font-size: 13px;
 }

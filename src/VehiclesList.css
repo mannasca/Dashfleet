@@ -1,0 +1,50 @@
+.vl-container {
+  padding: 24px;
+  color: #0f172a; /* slate-900 */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.vl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.vl-back {
+  text-decoration: none;
+  color: #2563eb; /* blue-600 */
+  font-weight: 500;
+}
+
+.vl-table-wrap {
+  margin-top: 16px;
+  overflow-x: auto;
+}
+
+.vl-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+}
+
+.vl-table thead tr {
+  text-align: left;
+  border-bottom: 1px solid #e6e7eb;
+  background: #f9fafb;
+}
+
+.vl-table th,
+.vl-table td {
+  padding: 8px 12px;
+  vertical-align: middle;
+}
+
+.vl-table tbody tr {
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.vl-empty {
+  padding: 16px;
+  color: #6b7280; /* gray-500 */
+  text-align: center;
+}
