@@ -1,0 +1,497 @@
+/* Maintenance Scheduling - Black & White Theme with Accent Colors */
+
+.ms-root {
+  padding: 32px;
+  min-height: 100vh;
+  background: #000000;
+  color: #ffffff;
+}
+
+.ms-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #333333;
+  flex-wrap: wrap;
+  margin-top: 8%;
+}
+
+.ms-title h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #00d4ff, #b14aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ms-sub {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #999999;
+}
+
+.ms-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.ms-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.ms-stat-card.scheduled {
+  border-color: #00ff88;
+}
+
+.ms-stat-card.scheduled svg {
+  color: #00ff88;
+}
+
+.ms-stat-card.pending {
+  border-color: #ff3366;
+}
+
+.ms-stat-card.pending svg {
+  color: #ff3366;
+}
+
+.ms-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.2);
+}
+
+.ms-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ms-stat-label {
+  font-size: 12px;
+  color: #999999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Content Layout */
+.ms-content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* Calendar Section */
+.ms-calendar-section {
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.ms-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.ms-month-year {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.ms-nav-btn {
+  background: #1a1a1a;
+  border: 2px solid #00d4ff;
+  color: #00d4ff;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-nav-btn:hover {
+  background: #00d4ff;
+  color: #000000;
+  transform: scale(1.05);
+}
+
+.ms-calendar {
+  margin-bottom: 20px;
+}
+
+.ms-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ms-weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #00d4ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 8px 0;
+}
+
+.ms-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.ms-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+  border: 2px solid #333333;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 8px;
+}
+
+.ms-day.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+.ms-day:not(.empty):hover {
+  border-color: #00d4ff;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.ms-day.today {
+  border-color: #b14aff;
+  background: #1a1a1a;
+  box-shadow: 0 0 20px rgba(177, 74, 255, 0.3);
+}
+
+.ms-day.has-events {
+  border-color: #00ff88;
+  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+}
+
+.ms-day-number {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.ms-event-indicator {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: linear-gradient(135deg, #00ff88, #00d4ff);
+  color: #000000;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 255, 136, 0.4);
+}
+
+/* Selected Date */
+.ms-selected-date {
+  background: #1a1a1a;
+  border: 2px solid #00d4ff;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.ms-selected-date h4 {
+  margin: 0 0 16px 0;
+  font-size: 16px;
+  color: #00d4ff;
+}
+
+.ms-selected-vehicles {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ms-selected-vehicle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.ms-selected-vehicle:hover {
+  border-color: #b14aff;
+  transform: translateX(4px);
+}
+
+.ms-vehicle-icon {
+  font-size: 24px;
+}
+
+.ms-vehicle-name {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.ms-vehicle-meta {
+  font-size: 12px;
+  color: #999999;
+  margin-top: 4px;
+}
+
+/* Pending Section */
+.ms-pending-section {
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  padding: 24px;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+.ms-section-header {
+  margin-bottom: 20px;
+}
+
+.ms-section-header h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #ffffff;
+}
+
+.ms-section-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #999999;
+}
+
+.ms-empty {
+  padding: 40px;
+  text-align: center;
+  color: #666666;
+  background: #0a0a0a;
+  border: 2px solid #333333;
+  border-radius: 8px;
+}
+
+.ms-pending-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ms-pending-card {
+  background: #0a0a0a;
+  border: 2px solid;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.ms-pending-card.priority-high {
+  border-color: #ff3366;
+}
+
+.ms-pending-card.priority-medium {
+  border-color: #ff8800;
+}
+
+.ms-pending-card.priority-low {
+  border-color: #ffdd00;
+}
+
+.ms-pending-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 51, 102, 0.3);
+}
+
+.ms-pending-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ms-priority-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.priority-high .ms-priority-badge {
+  background: linear-gradient(135deg, #ff3366, #ff6699);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+.priority-medium .ms-priority-badge {
+  background: linear-gradient(135deg, #ff8800, #ffaa44);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
+}
+
+.priority-low .ms-priority-badge {
+  background: linear-gradient(135deg, #ffdd00, #ffee44);
+  color: #000000;
+  box-shadow: 0 4px 12px rgba(255, 221, 0, 0.3);
+}
+
+.ms-pending-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.ms-pending-meta {
+  font-size: 12px;
+  color: #999999;
+  margin-top: 4px;
+}
+
+.ms-pending-details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ms-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #cccccc;
+}
+
+.ms-detail-item svg {
+  color: #00d4ff;
+}
+
+.ms-schedule-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #00d4ff, #b14aff);
+  color: #ffffff;
+  border: 2px solid #00d4ff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.ms-schedule-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.5);
+}
+
+/* Footer */
+.ms-footer {
+  padding-top: 24px;
+  border-top: 2px solid #333333;
+}
+
+.ms-back {
+  display: inline-block;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #00d4ff, #b14aff);
+  color: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 2px solid #00d4ff;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.ms-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .ms-content {
+    grid-template-columns: 1fr;
+  }
+
+  .ms-pending-section {
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .ms-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ms-stats {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .ms-stat-card {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .ms-day-number {
+    font-size: 14px;
+  }
+
+  .ms-event-indicator {
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+}

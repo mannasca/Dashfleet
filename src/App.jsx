@@ -17,6 +17,10 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import VehiclesList from "./VehiclesList";
 import EVBus from "./EVBus";
 import ActiveMaintenance from "./ActiveMaintenance";
+import PredictedFailures from "./PredictedFailures";
+import HomePage from "./HomePage";
+import Header from "./components/Header";
+import MaintenanceScheduling from "./MaintenanceScheduling";
 
 function StatCard({ icon, title, value, dangerous }) {
   return (
@@ -92,30 +96,54 @@ function Dashboard({ vehicles }) {
   const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
   const healthTrend = useMemo(() => {
     return weeks.map((wk, idx) => {
-      const noise = Math.round((Math.random() - 0.5) * 6); // +/- ~3
-      const raw = currentAvgHealth + noise - (1 - idx / 3);
+      // More dramatic variation - larger swings between weeks
+      const noise = Math.round((Math.random() - 0.5) * 20); // +/- ~10 for more drama
+      const trendDown = idx * 8; // Steeper decline each week
+      const raw = currentAvgHealth + noise - trendDown;
       let value = Math.round(raw);
-      value = Math.max(50, Math.min(100, value));
+      value = Math.max(40, Math.min(100, value)); // Wider range (40-100 instead of 50-100)
       return { week: wk, value };
     });
   }, [currentAvgHealth, endMonthHealth]); // recompute only when avg health or its month changes
 
   // Failures: 4 weekly counts for the selected month — memoized so only this card's buttons re-generate it
   const failuresPredicted = useMemo(() => {
-    const total = Math.max(0, Math.round(currentPredictedFailures));
+    // Use month/year as seed for consistent but different patterns per month
+    const monthSeed = endMonthFailures.getFullYear() * 12 + endMonthFailures.getMonth();
+    
+    const total = Math.max(5, Math.round(currentPredictedFailures * 2)); // Multiply by 2 for higher numbers
     if (total === 0) return weeks.map((wk) => ({ week: wk, count: 0 }));
 
-    const base = Math.floor(total / 4);
-    const remainder = total - base * 4;
-    const counts = [base, base, base, base];
-    for (let i = 0; i < remainder; i++) counts[i % 4] += 1;
+    // Seeded random function for consistency per month
+    const seededRandom = (seed) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
 
+    // Generate random but consistent patterns for each week based on month
+    const counts = [];
+    const avgPerWeek = Math.floor(total / 4);
+    
     for (let i = 0; i < 4; i++) {
-      const change = Math.round((Math.random() - 0.5) * Math.min(2, counts[i]));
-      if (change === 0) continue;
-      const j = (i + 1) % 4;
-      counts[i] = Math.max(0, counts[i] - change);
-      counts[j] = counts[j] + change;
+      // Each week gets a random multiplier between 0.3 and 2.5
+      const randomFactor = seededRandom(monthSeed * 7 + i * 13);
+      const multiplier = 0.3 + randomFactor * 2.2; // Range: 0.3 to 2.5
+      let count = Math.round(avgPerWeek * multiplier);
+      
+      // Add some extra variation
+      const extraVariation = seededRandom(monthSeed * 11 + i * 17);
+      count += Math.round((extraVariation - 0.5) * 20); // +/- 10
+      
+      counts[i] = Math.max(5, count); // Minimum 5 to keep visible
+    }
+
+    // Normalize so total roughly matches but maintains dramatic differences
+    const currentTotal = counts.reduce((sum, c) => sum + c, 0);
+    if (currentTotal > 0) {
+      const adjustmentFactor = total / currentTotal;
+      for (let i = 0; i < 4; i++) {
+        counts[i] = Math.max(5, Math.round(counts[i] * adjustmentFactor * (0.8 + seededRandom(monthSeed + i) * 0.4)));
+      }
     }
 
     return weeks.map((wk, i) => ({ week: wk, count: counts[i] }));
@@ -123,11 +151,13 @@ function Dashboard({ vehicles }) {
 
   return (
     <div className="app-root">
-      <header className="top-header">
-        <h1>Fleet Manager Dashboard</h1>
-      </header>
+      <Header />
+      <div className="content-with-header">
+        <header className="top-header">
+          <h1>Fleet Manager Dashboard</h1>
+        </header>
 
-      <section className="stats-grid">
+        <section className="stats-grid">
         {/* Link the Total Vehicles stat to the vehicles list page */}
         <Link to="/vehicles" style={{ textDecoration: "none" }}>
           <StatCard
@@ -137,16 +167,24 @@ function Dashboard({ vehicles }) {
           />
         </Link>
 
-        <Link to="/maintenance" style={{ textDecoration: "none" }}>
-          <StatCard icon={<Wrench />} title="Active Maintenance" value={vehicles.filter(v => v.inMaintenance).length || "0"} />
+                <Link to="/maintenance" style={{ textDecoration: "none" }}>
+          <StatCard
+            icon={<Wrench />}
+            title="Active Maintenance"
+            value={vehicles.filter((v) => v.inMaintenance).length || "0"}
+          />
         </Link>
-        <StatCard
-          icon={<AlertTriangle />}
-          title="Predicted Failures"
-          value="3"
-          dangerous
-        />
-        <StatCard icon={<Calendar />} title="Upcoming Services" value="7" />
+        <Link to="/failures" style={{ textDecoration: "none" }}>
+          <StatCard
+            icon={<AlertTriangle />}
+            title="Predicted Failures"
+            value={vehicles.filter((v) => v.issues > 0).length || "0"}
+            dangerous
+          />
+        </Link>
+        <Link to="/scheduling" style={{ textDecoration: "none" }}>
+          <StatCard icon={<Calendar />} title="Maintenance Scheduling" value="7" />
+        </Link>
       </section>
 
       <section className="charts-row">
@@ -166,18 +204,24 @@ function Dashboard({ vehicles }) {
             </div>
           </div>
           <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={300}>
               <LineChart data={healthTrend}>
-                <XAxis dataKey="week" />
-                <YAxis domain={[50, 100]} />
-                <Tooltip />
+                <XAxis dataKey="week" stroke="#999999" style={{ fontSize: '12px' }} />
+                <YAxis domain={[30, 100]} stroke="#999999" style={{ fontSize: '12px' }} />
+                <Tooltip contentStyle={{ background: '#0f0f0f', border: '2px solid #00d4ff', borderRadius: '8px' }} />
                 <Line
                   type="monotone"
                   dataKey="value"
-                  stroke="#2563eb"
-                  strokeWidth={3}
-                  dot={false}
+                  stroke="url(#colorHealth)"
+                  strokeWidth={4}
+                  dot={{ fill: "#00d4ff", r: 6, strokeWidth: 2, stroke: "#000000" }}
                 />
+                <defs>
+                  <linearGradient id="colorHealth" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#00d4ff" />
+                    <stop offset="100%" stopColor="#b14aff" />
+                  </linearGradient>
+                </defs>
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -199,12 +243,24 @@ function Dashboard({ vehicles }) {
             </div>
           </div>
           <div className="chart-wrapper">
-            <ResponsiveContainer width="100%" height={240}>
+            <ResponsiveContainer width="100%" height={300}>
               <BarChart data={failuresPredicted}>
-                <XAxis dataKey="week" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="count" radius={[8, 8, 0, 0]} fill="#f59e0b" />
+                <XAxis dataKey="week" stroke="#999999" style={{ fontSize: '12px' }} />
+                <YAxis domain={[0, "dataMax + 10"]} stroke="#999999" style={{ fontSize: '12px' }} />
+                <Tooltip contentStyle={{ background: '#0f0f0f', border: '2px solid #ff3366', borderRadius: '8px' }} />
+                <Bar 
+                  dataKey="count" 
+                  radius={[10, 10, 0, 0]} 
+                  fill="url(#colorFailures)"
+                  animationDuration={800}
+                  barSize={60}
+                />
+                <defs>
+                  <linearGradient id="colorFailures" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#ff3366" />
+                    <stop offset="100%" stopColor="#ff6b35" />
+                  </linearGradient>
+                </defs>
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -249,8 +305,9 @@ function Dashboard({ vehicles }) {
         </div>
       </section>
 
-      <div className="bottom-controls">
-        <button className="primary-btn">Generate Maintenance Report</button>
+        <div className="bottom-controls">
+          <button className="primary-btn">Generate Maintenance Report</button>
+        </div>
       </div>
     </div>
   );
@@ -314,9 +371,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard vehicles={vehicles} />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/dashboard" element={<Dashboard vehicles={vehicles} />} />
         <Route path="/vehicles" element={<VehiclesList vehicles={vehicles} />} />
         <Route path="/maintenance" element={<ActiveMaintenance vehicles={vehicles} />} />
+        <Route path="/failures" element={<PredictedFailures vehicles={vehicles} />} />
+        <Route path="/scheduling" element={<MaintenanceScheduling vehicles={vehicles} />} />
       </Routes>
     </BrowserRouter>
   );

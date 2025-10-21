@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import Header from "./components/Header";
 import "./VehiclesList.css";
 
 function VehiclesList({ vehicles = [] }) {
@@ -67,15 +68,14 @@ function VehiclesList({ vehicles = [] }) {
   }, [vehicles, nameQuery, issuesOnly, serviceWindow, sortBy, sortDir]);
 
   return (
-    <div className="vl-container">
-      <div className="vl-header">
-        <h2>All Vehicles</h2>
-        <Link to="/" className="vl-back">
-          ← Back to Dashboard
-        </Link>
-      </div>
+    <>
+      <Header />
+      <div className="vl-container content-with-header">
+        <div className="vl-header">
+          <h2>All Vehicles</h2>
+        </div>
 
-      <div className="vl-controls">
+        <div className="vl-controls">
         <input
           type="search"
           placeholder="Search name…"
@@ -147,7 +147,8 @@ function VehiclesList({ vehicles = [] }) {
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

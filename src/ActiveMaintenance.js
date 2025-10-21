@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Header from "./components/Header";
 import "./ActiveMaintence.css";
 
 export default function ActiveMaintenance({ vehicles = [] }) {
@@ -20,14 +21,16 @@ export default function ActiveMaintenance({ vehicles = [] }) {
   };
 
   return (
-    <div className="am-root card">
-      <div className="am-header">
-        <div className="am-title">
-          <h2>Active Maintenance</h2>
-          <p className="am-sub">Vehicles currently being repaired</p>
+    <>
+      <Header />
+      <div className="am-root content-with-header">
+        <div className="am-header">
+          <div className="am-title">
+            <h2>Active Maintenance</h2>
+            <p className="am-sub">Vehicles currently being repaired</p>
+          </div>
+          <div className="am-count" title={`${count} in maintenance`}>{count}</div>
         </div>
-        <div className="am-count" title={`${count} in maintenance`}>{count}</div>
-      </div>
 
       {count === 0 ? (
         <div className="am-empty">No vehicles are currently in maintenance.</div>
@@ -65,6 +68,7 @@ export default function ActiveMaintenance({ vehicles = [] }) {
           })}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

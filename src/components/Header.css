@@ -1,0 +1,128 @@
+/* Global Header Styles */
+
+.global-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #000000;
+  border-bottom: 2px solid #333333;
+  padding: 16px 32px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-left {
+  position: relative;
+}
+
+/* Hamburger Menu Button */
+.menu-toggle {
+  background: transparent;
+  border: 2px solid #00d4ff;
+  color: #00d4ff;
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.menu-toggle:hover {
+  background: #00d4ff;
+  color: #000000;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+  transform: scale(1.05);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  background: #0f0f0f;
+  border: 2px solid #00d4ff;
+  border-radius: 12px;
+  min-width: 250px;
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+  animation: slideDown 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: #ffffff;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-bottom: 1px solid #222222;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background: #00d4ff;
+  color: #000000;
+  padding-left: 28px;
+}
+
+/* Logo */
+.header-logo {
+  text-decoration: none;
+  margin-left: auto;
+}
+
+.header-logo h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  transition: all 0.3s ease;
+}
+
+.header-logo:hover h1 {
+  color: #00d4ff;
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .global-header {
+    padding: 12px 20px;
+  }
+
+  .header-logo h1 {
+    font-size: 24px;
+  }
+
+  .dropdown-menu {
+    min-width: 220px;
+  }
+}
