@@ -1,0 +1,153 @@
+.am-root {
+  padding: 16px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffffff,#fbfdff);
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+  color: #0f172a;
+}
+
+.am-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.am-title h2 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: -0.2px;
+}
+
+.am-sub {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.am-count {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#f97316,#fb923c);
+  color: white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:18px;
+  box-shadow: 0 6px 14px rgba(249,115,22,0.18);
+}
+
+.am-empty {
+  padding: 18px;
+  color: #6b7280;
+  text-align:center;
+}
+
+.am-list { display:flex; flex-direction:column; gap:10px; }
+
+/* item */
+.am-item {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px;
+  border-radius:8px;
+  background:#fff;
+  border:1px solid #eef2f7;
+  align-items:center;
+}
+
+.am-item-left { flex:1; min-width:0; }
+.am-name { font-weight:600; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.am-meta { font-size:13px; color:#6b7280; margin-top:4px; }
+
+/* right column */
+/* .am-item-right { display:flex; align-items:center; gap:12px; } */
+
+.am-issues {
+  padding:6px 9px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:13px;
+  color:#7c2d12;
+  background:#fff2ed;
+  border:1px solid #ffd6cc;
+}
+.am-issues.low {
+  color:#92400e;
+  background:#fff7ed;
+  border:1px solid #fed7aa;
+}
+.am-issues.high {
+  color:#7f1d1d;
+  background:#fff1f2;
+  border:1px solid #fecaca;
+}
+
+/* health bar */
+.am-health { display:flex; align-items:center; gap:8px; min-width:140px; }
+.am-health-bar {
+  width:110px;
+  height:10px;
+  background:#f1f5f9;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid #eef2f7;
+}
+.am-health-fill {
+  height:100%;
+  background: linear-gradient(90deg,#10b981,#34d399);
+  width:0%;
+}
+.am-health-label { font-size:13px; color:#111827; min-width:34px; text-align:right; }
+
+/* details link */
+.am-details {
+  display:inline-block;
+  padding:6px 10px;
+  background:#eef2ff;
+  color:#1e3a8a;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+  font-size:13px;
+}
+.am-item-right.am-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.am-info-item {
+  text-align: right;
+  min-width: 110px;
+}
+
+.am-info-item .label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.am-info-item .value {
+  font-weight: 700;
+  font-size: 14px;
+  color: #111827;
+}
+
+.am-info-item .muted {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.am-info-item.unresolved.has .value {
+  color: #b91c1c;
+}
+
+.am-info-item.unresolved.none .value {
+  color: #065f46;
+}

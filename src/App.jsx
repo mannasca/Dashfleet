@@ -15,6 +15,8 @@ import Papa from "papaparse";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import VehiclesList from "./VehiclesList";
+import EVBus from "./EVBus";
+import ActiveMaintenance from "./ActiveMaintenance";
 
 function StatCard({ icon, title, value, dangerous }) {
   return (
@@ -135,7 +137,9 @@ function Dashboard({ vehicles }) {
           />
         </Link>
 
-        <StatCard icon={<Wrench />} title="Active Maintenance" value="5" />
+        <Link to="/maintenance" style={{ textDecoration: "none" }}>
+          <StatCard icon={<Wrench />} title="Active Maintenance" value={vehicles.filter(v => v.inMaintenance).length || "0"} />
+        </Link>
         <StatCard
           icon={<AlertTriangle />}
           title="Predicted Failures"
@@ -209,6 +213,8 @@ function Dashboard({ vehicles }) {
 
       <section className="vehicles-section">
         <h2>Vehicle Status Overview</h2>
+        {/* 3D vehicle preview / fleet model */}
+        {/* <EVBus vehicles={vehicles} initialColor="#2b7cff" /> */}
         <div className="vehicles-grid">
           {vehicles.slice(0, 6).map((v) => (
             <motion.div
@@ -281,14 +287,19 @@ export default function App() {
             const mapped = rows
               .filter((r) => r.brand && r.model)
               .slice(0, 200)
-              .map((r, idx) => ({
-                id: idx + 1,
-                name: `${r.brand} ${r.model}`,
-                health: computeHealth(r),
-                nextService: computeNextService(),
-                issues: Math.floor(Math.random() * 4),
-                raw: r,
-              }));
+              .map((r, idx) => {
+                const issues = Math.floor(Math.random() * 4);
+                const inMaintenance = issues > 0 && Math.random() < 0.25; // ~25% of vehicles with issues are in repair
+                return {
+                  id: idx + 1,
+                  name: `${r.brand} ${r.model}`,
+                  health: computeHealth(r),
+                  nextService: computeNextService(),
+                  issues,
+                  inMaintenance,
+                  raw: r,
+                };
+              });
             setVehicles(mapped);
           },
         });
@@ -305,6 +316,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Dashboard vehicles={vehicles} />} />
         <Route path="/vehicles" element={<VehiclesList vehicles={vehicles} />} />
+        <Route path="/maintenance" element={<ActiveMaintenance vehicles={vehicles} />} />
       </Routes>
     </BrowserRouter>
   );
