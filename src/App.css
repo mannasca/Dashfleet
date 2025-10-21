@@ -108,6 +108,44 @@ body {
   height: 240px;
 }
 
+/* Chart card header */
+.chart-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+/* Chart month controls */
+.chart-month-controls {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Chart month buttons */
+.chart-month-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+/* Chart month buttons hover */
+.chart-month-btn:hover {
+  background: #f3f4f6;
+}
+
+/* Chart month labels */
+.chart-month-label {
+  font-size: 13px;
+  color: #111827;
+  font-weight: 600;
+  padding: 0 6px;
+}
+
 /* Vehicles section */
 .vehicles-section {
   margin-top: 8px;
@@ -206,4 +244,33 @@ body {
 .recharts-default-tooltip {
   font-family: var(--font-family);
   font-size: 13px;
+}
+
+.month-controls {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--soft-shadow);
+}
+
+.month-btn {
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.month-btn:hover {
+  background: #f3f4f6;
+}
+
+.month-label {
+  font-size: 14px;
+  color: #111827;
 }

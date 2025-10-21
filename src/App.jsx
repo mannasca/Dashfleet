@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -46,19 +46,78 @@ function ProgressBar({ value }) {
 }
 
 function Dashboard({ vehicles }) {
-  const healthTrend = [
-    { day: "Mon", value: 90 },
-    { day: "Tue", value: 88 },
-    { day: "Wed", value: 85 },
-    { day: "Thu", value: 80 },
-    { day: "Fri", value: 75 },
-  ];
+  // month navigation only used for failures breakdown
+  const [endMonthHealth, setEndMonthHealth] = React.useState(() => {
+    const d = new Date();
+    d.setDate(1);
+    return d;
+  }); // kept for compatibility but health x-axis will remain w1..w4
+  const [endMonthFailures, setEndMonthFailures] = React.useState(() => {
+    const d = new Date();
+    d.setDate(1);
+    return d;
+  });
 
-  const failuresPredicted = [
-    { name: "Engine", count: 4 },
-    { name: "Brakes", count: 2 },
-    { name: "Transmission", count: 1 },
-  ];
+  const formatMonthLabel = (d) =>
+    d.toLocaleString(undefined, { month: "short", year: "numeric" });
+
+  const shiftHealthMonth = (n) =>
+    setEndMonthHealth((prev) => {
+      const d = new Date(prev);
+      d.setMonth(d.getMonth() + n);
+      return d;
+    }); // no effect on health x-axis labels
+
+  const shiftFailuresMonth = (n) =>
+    setEndMonthFailures((prev) => {
+      const d = new Date(prev);
+      d.setMonth(d.getMonth() + n);
+      return d;
+    });
+
+  // compute current aggregate values from vehicles
+  const currentAvgHealth = vehicles.length
+    ? Math.round(
+        vehicles.reduce((s, v) => s + Number(v.health || 0), 0) / vehicles.length
+      )
+    : 80;
+
+  const currentPredictedFailures = vehicles.length
+    ? vehicles.reduce((s, v) => s + Number(v.issues || 0), 0)
+    : Math.max(1, Math.round((vehicles.length || 10) * 0.05));
+
+  // Health: always four weekly buckets labeled w1..w4 — memoized so it only changes when health inputs change
+  const weeks = ["Week 1", "Week 2", "Week 3", "Week 4"];
+  const healthTrend = useMemo(() => {
+    return weeks.map((wk, idx) => {
+      const noise = Math.round((Math.random() - 0.5) * 6); // +/- ~3
+      const raw = currentAvgHealth + noise - (1 - idx / 3);
+      let value = Math.round(raw);
+      value = Math.max(50, Math.min(100, value));
+      return { week: wk, value };
+    });
+  }, [currentAvgHealth, endMonthHealth]); // recompute only when avg health or its month changes
+
+  // Failures: 4 weekly counts for the selected month — memoized so only this card's buttons re-generate it
+  const failuresPredicted = useMemo(() => {
+    const total = Math.max(0, Math.round(currentPredictedFailures));
+    if (total === 0) return weeks.map((wk) => ({ week: wk, count: 0 }));
+
+    const base = Math.floor(total / 4);
+    const remainder = total - base * 4;
+    const counts = [base, base, base, base];
+    for (let i = 0; i < remainder; i++) counts[i % 4] += 1;
+
+    for (let i = 0; i < 4; i++) {
+      const change = Math.round((Math.random() - 0.5) * Math.min(2, counts[i]));
+      if (change === 0) continue;
+      const j = (i + 1) % 4;
+      counts[i] = Math.max(0, counts[i] - change);
+      counts[j] = counts[j] + change;
+    }
+
+    return weeks.map((wk, i) => ({ week: wk, count: counts[i] }));
+  }, [currentPredictedFailures, endMonthFailures]);
 
   return (
     <div className="app-root">
@@ -67,6 +126,7 @@ function Dashboard({ vehicles }) {
       </header>
 
       <section className="stats-grid">
+        {/* Link the Total Vehicles stat to the vehicles list page */}
         <Link to="/vehicles" style={{ textDecoration: "none" }}>
           <StatCard
             icon={<Truck />}
@@ -87,12 +147,25 @@ function Dashboard({ vehicles }) {
 
       <section className="charts-row">
         <div className="card chart-card">
-          <h2>Average Fleet Health</h2>
+          <div className="chart-card-header">
+            <h2>Average Fleet Health</h2>
+            <div className="chart-month-controls">
+              <button className="chart-month-btn" onClick={() => shiftHealthMonth(-1)}>
+                ◀
+              </button>
+              <div className="chart-month-label">
+                {formatMonthLabel(endMonthHealth)}
+              </div>
+              <button className="chart-month-btn" onClick={() => shiftHealthMonth(1)}>
+                ▶
+              </button>
+            </div>
+          </div>
           <div className="chart-wrapper">
             <ResponsiveContainer width="100%" height={240}>
               <LineChart data={healthTrend}>
-                <XAxis dataKey="day" />
-                <YAxis domain={[60, 100]} />
+                <XAxis dataKey="week" />
+                <YAxis domain={[50, 100]} />
                 <Tooltip />
                 <Line
                   type="monotone"
@@ -107,14 +180,27 @@ function Dashboard({ vehicles }) {
         </div>
 
         <div className="card chart-card">
-          <h2>Predicted Failures</h2>
+          <div className="chart-card-header">
+            <h2>Predicted Failures</h2>
+            <div className="chart-month-controls">
+              <button className="chart-month-btn" onClick={() => shiftFailuresMonth(-1)}>
+                ◀
+              </button>
+              <div className="chart-month-label">
+                {formatMonthLabel(endMonthFailures)}
+              </div>
+              <button className="chart-month-btn" onClick={() => shiftFailuresMonth(1)}>
+                ▶
+              </button>
+            </div>
+          </div>
           <div className="chart-wrapper">
             <ResponsiveContainer width="100%" height={240}>
               <BarChart data={failuresPredicted}>
-                <XAxis dataKey="name" />
+                <XAxis dataKey="week" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="count" radius={[8, 8, 0, 0]} />
+                <Bar dataKey="count" radius={[8, 8, 0, 0]} fill="#f59e0b" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -134,7 +220,8 @@ function Dashboard({ vehicles }) {
                 <div className="vehicle-header">
                   <h3>{v.name}</h3>
                   <div className="vehicle-meta">
-                    Next Service: <span className="meta-date">{v.nextService}</span>
+                    Next Service:{" "}
+                    <span className="meta-date">{v.nextService}</span>
                   </div>
                 </div>
 
