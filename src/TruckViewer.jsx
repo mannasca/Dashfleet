@@ -4,7 +4,6 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import "./TruckViewer.css";
 
 const AREA_LABELS = {
-  engine: "Engine",
   brakes: "Brakes",
   transmission: "Transmission",
   battery: "Battery",

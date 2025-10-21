@@ -6,13 +6,6 @@ import "./PredictedFailures.css";
 
 // Map issues to actionable insights
 const ISSUE_DATABASE = {
-  engine: {
-    label: "Engine",
-    description: "Performance degradation detected",
-    insight: "Schedule engine diagnostics. Check air filters, fuel injectors, and spark plugs. May require oil change.",
-    severity: "high",
-    area: "engine"
-  },
   brakes: {
     label: "Brakes",
     description: "Brake pad wear exceeding threshold",
