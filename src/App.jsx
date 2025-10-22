@@ -15,12 +15,12 @@ import Papa from "papaparse";
 import "./App.css";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import VehiclesList from "./VehiclesList";
-import EVBus from "./EVBus";
 import ActiveMaintenance from "./ActiveMaintenance";
 import PredictedFailures from "./PredictedFailures";
 import HomePage from "./HomePage";
 import Header from "./components/Header";
 import MaintenanceScheduling from "./MaintenanceScheduling";
+import VehicleHistory from "./VehicleHistory.jsx";
 
 function StatCard({ icon, title, value, dangerous }) {
   return (
@@ -369,15 +369,14 @@ export default function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dashboard" element={<Dashboard vehicles={vehicles} />} />
-        <Route path="/vehicles" element={<VehiclesList vehicles={vehicles} />} />
-        <Route path="/maintenance" element={<ActiveMaintenance vehicles={vehicles} />} />
-        <Route path="/failures" element={<PredictedFailures vehicles={vehicles} />} />
-        <Route path="/scheduling" element={<MaintenanceScheduling vehicles={vehicles} />} />
-      </Routes>
-    </BrowserRouter>
+   <Routes>
+    <Route path="/" element={<HomePage />} />
+    <Route path="/dashboard" element={<Dashboard vehicles={vehicles} />} />
+    <Route path="/vehicles" element={<VehiclesList vehicles={vehicles} />} />
+    <Route path="/vehicles/:id" element={<VehicleHistory vehicles={vehicles} />} />
+    <Route path="/maintenance" element={<ActiveMaintenance vehicles={vehicles} />} />
+    <Route path="/failures" element={<PredictedFailures vehicles={vehicles} />} />
+    <Route path="/scheduling" element={<MaintenanceScheduling vehicles={vehicles} />} />
+  </Routes>
   );
 }

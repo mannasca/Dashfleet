@@ -1,0 +1,259 @@
+/* VehicleHistory.css */
+
+/* Root */
+.vh-root {
+  padding: 32px;
+  min-height: 100vh;
+  background: #000000;
+  color: #ffffff;
+}
+
+/* Header */
+.vh-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin: 10% 0 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #333333;
+}
+
+.vh-title h1,
+.vh-title h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #00d4ff, #b14aff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vh-sub {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #999999;
+}
+
+/* Count badge */
+.vh-count {
+  min-width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #b14aff, #ff3399);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 24px;
+  box-shadow: 0 8px 24px rgba(177, 74, 255, 0.4);
+  border: 2px solid #b14aff;
+}
+
+/* Empty state */
+.vh-empty {
+  padding: 40px;
+  color: #666666;
+  text-align: center;
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+/* Timeline/list wrapper */
+.vh-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Event card / item */
+.vh-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #0f0f0f;
+  border: 2px solid #333333;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.vh-item:hover {
+  border-color: #b14aff;
+  transform: translateX(4px);
+  box-shadow: 0 8px 24px rgba(177, 74, 255, 0.2);
+}
+
+.vh-item-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.vh-name {
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vh-meta {
+  font-size: 13px;
+  color: #999999;
+  margin-top: 4px;
+}
+
+/* Right-side info pills */
+.vh-item-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.vh-pill {
+  padding: 6px 9px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff8800, #ffaa44);
+  border: 2px solid #ff8800;
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.3);
+}
+
+.vh-pill.low {
+  color: #000000;
+  background: linear-gradient(135deg, #ffdd00, #ffee44);
+  border: 2px solid #ffdd00;
+  box-shadow: 0 4px 12px rgba(255, 221, 0, 0.3);
+}
+
+.vh-pill.high {
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff3366, #ff6699);
+  border: 2px solid #ff3366;
+  box-shadow: 0 4px 12px rgba(255, 51, 102, 0.3);
+}
+
+/* Info blocks (cost, tech, status) */
+.vh-info {
+  text-align: right;
+  min-width: 120px;
+}
+.vh-info .label {
+  font-size: 12px;
+  color: #999999;
+}
+.vh-info .value {
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+}
+.vh-info .muted {
+  font-weight: 500;
+  color: #999999;
+  font-size: 12px;
+  margin-left: 6px;
+}
+.vh-info.unresolved .value { color: #ff3366; }
+.vh-info.resolved   .value { color: #00ff88; }
+
+/* Back button / link */
+.vh-back {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #00d4ff, #b14aff);
+  color: #ffffff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+  border: 2px solid #00d4ff;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+.vh-back:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 212, 255, 0.5);
+}
+
+/* History table (if you render a table view) */
+.vh-table {
+  margin-top: 16px;
+  border: 2px solid #333333;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0f0f1f;
+}
+.vh-table table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+.vh-table th,
+.vh-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.vh-table th {
+  background: rgba(255, 255, 255, 0.05);
+  font-weight: 700;
+}
+.vh-table tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Badges for status */
+.vh-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  border: 2px solid transparent;
+}
+.vh-status.completed {
+  color: #00ff88;
+  border-color: #00ff88;
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.25);
+}
+.vh-status.pending {
+  color: #ffdd00;
+  border-color: #ffdd00;
+  box-shadow: 0 0 8px rgba(255, 221, 0, 0.25);
+}
+.vh-status.failed {
+  color: #ff3366;
+  border-color: #ff3366;
+  box-shadow: 0 0 8px rgba(255, 51, 102, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+  .vh-header { margin-top: 24px; }
+  .vh-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .vh-item-right {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .vh-info { text-align: left; }
+}
+
+/* Optional: print-friendly */
+@media print {
+  .vh-back { display: none; }
+  .vh-root { background: #fff; color: #000; }
+  .vh-item, .vh-table { box-shadow: none; border-color: #ccc; background: #fff; }
+}

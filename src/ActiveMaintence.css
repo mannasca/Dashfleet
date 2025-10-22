@@ -185,3 +185,25 @@
 .am-info-item.unresolved.none .value {
   color: #00ff88;
 }
+
+
+.history-table table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  background: #0f0f1f;
+  color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.history-table th, .history-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.history-table th {
+  background: rgba(255,255,255,0.05);
+}
+.history-table tr:hover {
+  background: rgba(255,255,255,0.08);
+}
